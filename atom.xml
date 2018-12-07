@@ -6,7 +6,7 @@
   <link href="/blog/atom.xml" rel="self"/>
   
   <link href="https://wangcherry.github.io/blog/"/>
-  <updated>2018-12-06T09:23:03.192Z</updated>
+  <updated>2018-12-07T03:15:11.700Z</updated>
   <id>https://wangcherry.github.io/blog/</id>
   
   <author>
@@ -17,24 +17,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>rx和promise一个小例子</title>
+    <link href="https://wangcherry.github.io/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/"/>
+    <id>https://wangcherry.github.io/blog/2018/12/07/rx和promise一个小例子/</id>
+    <published>2018-12-07T03:12:51.000Z</published>
+    <updated>2018-12-07T03:15:11.700Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;rx和promise一个小例子&quot;&gt;&lt;a href=&quot;#rx和promise一个小例子&quot; class=&quot;headerlink&quot; title=&quot;rx和promise一个小例子&quot;&gt;&lt;/a&gt;rx和promise一个小例子&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;系统中多处需要用到的接口
+      
+    
+    </summary>
+    
+    
+      <category term="rx promise angular" scheme="https://wangcherry.github.io/blog/tags/rx-promise-angular/"/>
+    
+  </entry>
+  
+  <entry>
     <title>下载和打印</title>
     <link href="https://wangcherry.github.io/blog/2018/12/06/%E4%B8%8B%E8%BD%BD%E5%92%8C%E6%89%93%E5%8D%B0/"/>
     <id>https://wangcherry.github.io/blog/2018/12/06/下载和打印/</id>
     <published>2018-12-06T09:22:37.000Z</published>
-    <updated>2018-12-06T09:23:03.192Z</updated>
+    <updated>2018-12-07T03:38:59.636Z</updated>
     
-    <content type="html"><![CDATA[<p>#下载和打印</p>]]></content>
+    <content type="html"><![CDATA[<p>#下载和打印</p><ul><li>随便写点什么也不至于空着啊</li><li>难道你是白卷交多了</li></ul>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;#下载和打印&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;随便写点什么也不至于空着啊&lt;/li&gt;
+&lt;li&gt;难道你是白卷交多了&lt;/li&gt;
+&lt;/ul&gt;
 
       
     
     </summary>
     
+    
+      <category term="angular" scheme="https://wangcherry.github.io/blog/tags/angular/"/>
     
   </entry>
   
