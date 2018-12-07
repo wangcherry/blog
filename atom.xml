@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>小英英的博客</title>
+  
+  
+  <link href="/blog/atom.xml" rel="self"/>
+  
+  <link href="https://wangcherry.github.io/blog/"/>
+  <updated>2018-12-06T09:23:03.192Z</updated>
+  <id>https://wangcherry.github.io/blog/</id>
+  
+  <author>
+    <name>小英英</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>下载和打印</title>
+    <link href="https://wangcherry.github.io/blog/2018/12/06/%E4%B8%8B%E8%BD%BD%E5%92%8C%E6%89%93%E5%8D%B0/"/>
+    <id>https://wangcherry.github.io/blog/2018/12/06/下载和打印/</id>
+    <published>2018-12-06T09:22:37.000Z</published>
+    <updated>2018-12-06T09:23:03.192Z</updated>
+    
+    <content type="html"><![CDATA[<p>#下载和打印</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;#下载和打印&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
