@@ -6,7 +6,7 @@
   <link href="/blog/atom.xml" rel="self"/>
   
   <link href="https://wangcherry.github.io/blog/"/>
-  <updated>2018-12-12T06:35:49.100Z</updated>
+  <updated>2018-12-12T09:07:05.270Z</updated>
   <id>https://wangcherry.github.io/blog/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://wangcherry.github.io/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/"/>
     <id>https://wangcherry.github.io/blog/2018/12/07/rx和promise一个小例子/</id>
     <published>2018-12-07T03:12:51.000Z</published>
-    <updated>2018-12-12T06:35:49.100Z</updated>
+    <updated>2018-12-12T09:07:05.270Z</updated>
     
     <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
     
