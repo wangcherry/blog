@@ -10,10 +10,20 @@
         <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
       
       
+      <categories>
+          
+          <category> 前端 </category>
+          
+      </categories>
+      
       
         <tags>
             
-            <tag> rx promise angular </tag>
+            <tag> rx </tag>
+            
+            <tag> promise </tag>
+            
+            <tag> angular </tag>
             
         </tags>
       
@@ -26,6 +36,12 @@
       
         <content type="html"><![CDATA[<p>#下载和打印</p><ul><li>随便写点什么也不至于空着啊</li><li>难道你是白卷交多了</li></ul>]]></content>
       
+      
+      <categories>
+          
+          <category> 前端 </category>
+          
+      </categories>
       
       
         <tags>
