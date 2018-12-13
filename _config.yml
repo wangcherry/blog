@@ -1,0 +1,115 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: 小英英的博客
+subtitle:
+description: 越努力越幸运~
+author: 小英英
+language:
+timezone:
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url:  https://wangcherry.github.io/blog/
+root: /blog/
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: false
+  tab_replace:
+  
+# Home page setting
+# path: Root path for your blogs index page. (default = '')
+# per_page: Posts displayed per page. (0 = disable pagination)
+# order_by: Posts order. (Order by date descending by default)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+  
+# Category & Tag
+default_category: uncategorized
+category_map: 
+tag_map:
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 10
+pagination_dir: page
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: material-x
+
+# Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+  type: git
+  repo: https://github.com/wangcherry/blog.git
+  branch: master
+
+# 来必力评论
+livere_uid: MTAyMC80MTUxNC8xODA2MQ==
+
+# >> 主题配置写法示例 ---------------------------------------------------------------------
+# 导航栏，url必须以 "/" 结尾
+nav_menu:
+  - name: 主页
+    icon: fas fa-home
+    url: /
+  - name: 归档
+    icon: fas fa-archive
+    url: /archives/
+
+# 页脚社交信息的写法示例
+social:
+  - icon: fas fa-envelope
+    url: mailto:wang_cherry0312@163.com
+  - icon: fab fa-github
+    url: https://github.com/wangcherry
+  - icon: fas fa-music
+    url: https://music.163.com/#/user/home?id=101896565
+
+# 博主信息的写法示例
+avatar: https://avatars1.githubusercontent.com/u/11580793?s=400&u=83c6e8472c9929450ab45febf5d8b9be8be9e115&v=4
+motto: 越努力越幸运~
+
+# 百度统计key
+baidu_analytics_key: 0071cf62da0685343189eb7df3a37ce6
+# leancloud统计
+leancloud_analytics:
+  appId: yX0UtBJ0DBBhjF7HrUSafTva-gzGzoHsz
+  appKey: m7rKVDKmPvsaBb4rsuXGQf1d
