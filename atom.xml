@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>小英英的博客</title>
+  
+  
+  <link href="/blog/atom.xml" rel="self"/>
+  
+  <link href="https://wangcherry.github.io/blog/"/>
+  <updated>2018-12-27T05:59:53.971Z</updated>
+  <id>https://wangcherry.github.io/blog/</id>
+  
+  <author>
+    <name>小英英</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>文件下载和页面打印</title>
+    <link href="https://wangcherry.github.io/blog/2018/12/27/%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%92%8C%E9%A1%B5%E9%9D%A2%E6%89%93%E5%8D%B0/"/>
+    <id>https://wangcherry.github.io/blog/2018/12/27/文件下载和页面打印/</id>
+    <published>2018-12-27T05:58:10.000Z</published>
+    <updated>2018-12-27T05:59:53.971Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="前端" scheme="https://wangcherry.github.io/blog/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="typescript" scheme="https://wangcherry.github.io/blog/tags/typescript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>rx和promise一个小例子</title>
+    <link href="https://wangcherry.github.io/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/"/>
+    <id>https://wangcherry.github.io/blog/2018/12/07/rx和promise一个小例子/</id>
+    <published>2018-12-07T03:12:51.000Z</published>
+    <updated>2018-12-27T03:36:01.247Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;rx和promise一个小例子&quot;&gt;&lt;a href=&quot;#rx和promise一个小例子&quot; class=&quot;headerlink&quot; title=&quot;rx和promise一个小例子&quot;&gt;&lt;/a&gt;rx和promise一个小例子&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;系统中多处需要用到的接口
+      
+    
+    </summary>
+    
+      <category term="前端" scheme="https://wangcherry.github.io/blog/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="rx" scheme="https://wangcherry.github.io/blog/tags/rx/"/>
+    
+      <category term="promise" scheme="https://wangcherry.github.io/blog/tags/promise/"/>
+    
+      <category term="angular" scheme="https://wangcherry.github.io/blog/tags/angular/"/>
+    
+  </entry>
+  
+</feed>
