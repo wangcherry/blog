@@ -158,7 +158,18 @@
     </section>
 
     <section class="article typo">
-        
+        <p>文件下载和页面打印在业务中有很多使用场景，它们的本质是一样的，都是向后端请求一个文件，然后下载或者打印。</p>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><ul>
+<li>使用 a 标签<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/i/w3school_logo_white.gif"</span> <span class="attr">download</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="关于-download-重命名"><a href="#关于-download-重命名" class="headerlink" title="关于 download 重命名"></a>关于 download 重命名</h4><ul>
+<li>download 的值可作为文件的名称</li>
+<li>后端如果对文件命名，那么会使用后端的命名</li>
+<li>在后端没有命名时，以 download 的值为文件名称</li>
+<li>都没命名时，或者 download 值设置为空时，下载的文件用文件本身的名称</li>
+</ul>
+
         
 
         
