@@ -72,34 +72,4 @@
     
   </entry>
   
-  <entry>
-    <title>rx和promise一个小例子</title>
-    <link href="https://wangcherry.github.io/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/"/>
-    <id>https://wangcherry.github.io/blog/2018/12/07/rx和promise一个小例子/</id>
-    <published>2018-12-07T03:12:51.000Z</published>
-    <updated>2018-12-27T03:36:01.247Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;rx和promise一个小例子&quot;&gt;&lt;a href=&quot;#rx和promise一个小例子&quot; class=&quot;headerlink&quot; title=&quot;rx和promise一个小例子&quot;&gt;&lt;/a&gt;rx和promise一个小例子&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;系统中多处需要用到的接口
-      
-    
-    </summary>
-    
-      <category term="前端" scheme="https://wangcherry.github.io/blog/categories/%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="rx" scheme="https://wangcherry.github.io/blog/tags/rx/"/>
-    
-      <category term="promise" scheme="https://wangcherry.github.io/blog/tags/promise/"/>
-    
-      <category term="angular" scheme="https://wangcherry.github.io/blog/tags/angular/"/>
-    
-  </entry>
-  
 </feed>

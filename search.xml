@@ -52,33 +52,6 @@
       
     </entry>
     
-    <entry>
-      <title>rx和promise一个小例子</title>
-      <link href="/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/"/>
-      <url>/blog/2018/12/07/rx%E5%92%8Cpromise%E4%B8%80%E4%B8%AA%E5%B0%8F%E4%BE%8B%E5%AD%90/</url>
-      
-        <content type="html"><![CDATA[<h1 id="rx和promise一个小例子"><a href="#rx和promise一个小例子" class="headerlink" title="rx和promise一个小例子"></a>rx和promise一个小例子</h1><ul><li>系统中多处需要用到的接口</li><li>例如用户信息、店铺列表</li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 前端 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> rx </tag>
-            
-            <tag> promise </tag>
-            
-            <tag> angular </tag>
-            
-        </tags>
-      
-    </entry>
-    
   
   
 </search>
