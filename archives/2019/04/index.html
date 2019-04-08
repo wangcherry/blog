@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>Tag: css | 小英英的博客</title>
+  <title>Archives: 2019/4 | 小英英的博客</title>
   
   <meta name="HandheldFriendly" content="True">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,8 +127,9 @@
     <div class='container clearfix'>
         <div class='l_main'>
             
+	
     <script>
-        window.subData= { title:'标签 : css'}
+        window.subData= { title:'year : 2019.4'}
     </script>
 
 
@@ -138,14 +139,14 @@
             <article class="post reveal ">
     <section class="meta">
         <h2 class="title">
-            <a href="/blog/2019/01/12/表格固定表头和固定列/">
+            <a href="/blog/2019/04/08/barrel文件引起循环依赖/">
                 
-                    表格固定表头和固定列
+                    barrel文件引起循环依赖
                 
             </a>
         </h2>
         <time class="time">
-            <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2019-01-12
+            <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2019-04-08
         </time>
         
     
@@ -158,53 +159,25 @@
     </section>
 
     <section class="article typo">
-        <p>平时业务中经常会碰到固定表头或者固定列的需求，对于只固定表头或者固定列的情况可以使用两个表格，利用css实现。但是对于需要同时固定表头和列的情况，就需要四个表格完成样式，js监听滚动事件。如果表格数据比较多，样式复杂，性能就会受影响，效果不是很理想。那么，我们还有其他方式实现同时固定表头和列吗？</p>
-<p>答案是，yes</p>
-<p>接下来给大家介绍下 position: sticky; 这个属性</p>
-<h2 id="position属性"><a href="#position属性" class="headerlink" title="position属性"></a>position属性</h2><p>CSS position属性用于指定一个元素在文档中的定位方式。top，right，bottom 和 left 属性则决定了该元素的最终位置。<br>position 常用值有：</p>
-<ul>
-<li>absolute（生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。）</li>
-<li>relative（生成相对定位的元素，相对于其正常位置进行定位。）</li>
-<li>fixed（生成固定定位的元素，相对于浏览器窗口进行定位。）</li>
-<li>sticky（生成粘性定位元素）</li>
-</ul>
-<p>下面我们主要介绍的是粘性定位</p>
-<h2 id="粘性定位"><a href="#粘性定位" class="headerlink" title="粘性定位"></a>粘性定位</h2><p>属性为 position: sticky 的元素是粘性定位元素。</p>
-<p>粘性定位可以被认为是相对定位和固定定位的混合。元素在跨越特定阈值前为相对定位，之后为固定定位。举个栗子：</p>
-<p>git效果图：</p>
-<p><img src="https://yanxuan.nosdn.127.net/256ba3567699a9e07d40209c60e7a25c.gif" alt=""></p>
-<p>dt元素在到达顶部之前为相对定位，当元素的top为0之后，就固定在顶部。</p>
-<p><a href="https://codepen.io/wangcherry/pen/rooJEV" target="_blank" rel="noopener">查看源码</a></p>
-<h2 id="position-sticky-实现表格固定表头和列"><a href="#position-sticky-实现表格固定表头和列" class="headerlink" title="position: sticky; 实现表格固定表头和列"></a>position: sticky; 实现表格固定表头和列</h2><p>一个表格轻松搞定表头和列固定</p>
-<p>gif效果图：</p>
-<p><img src="https://yanxuan.nosdn.127.net/190e03363b77c9c9a8f5c91169b70fa0.gif" alt=""></p>
-<p><a href="https://codepen.io/wangcherry/pen/PXXRqd" target="_blank" rel="noopener">查看源码</a></p>
-<p>需要注意：</p>
-<ul>
-<li>该粘性定位元素并不脱离文档流，仍然保留元素原本在文档流中的位置。</li>
-<li>当元素在容器中被滚动超过指定的偏移值时，元素在容器内固定在指定位置。亦即如果你设置了top: 50px，那么在sticky元素到达距离相对定位的元素顶部50px的位置时固定，不再向上移动。</li>
-<li>元素固定的相对偏移是相对于离它最近的具有滚动框的祖先元素，如果祖先元素都不可以滚动，那么是相对于viewport来计算元素的偏移量</li>
-<li>须指定 top, right, bottom 或 left 四个阈值其中之一，才可使粘性定位生效。否则其行为与相对定位相同。并且 top 和 bottom 同时设置时，top 生效的优先级高，left 和 right 同时设置时，left 的优先级高。</li>
-</ul>
-<p>兼容性：</p>
-<ul>
-<li>这个属性的兼容性还不是很好，目前仍是一个试验性的属性，并不是W3C推荐的标准。<a href="https://caniuse.com/#search=position%3Asticky" target="_blank" rel="noopener">查看兼容性</a><br><img src="https://yanxuan.nosdn.127.net/e68f0b5f9ed7b0932320e516d4b8d9c9.png" alt=""></li>
-</ul>
-<h2 id="js实现表格固定表头和列"><a href="#js实现表格固定表头和列" class="headerlink" title="js实现表格固定表头和列"></a>js实现表格固定表头和列</h2><p>对兼容性要求高时可以考虑用js监听滚动实现固定</p>
-<p>gif效果图：</p>
-<p><img src="https://yanxuan.nosdn.127.net/83e278cbe3a7df608d7795869b941499.gif" alt=""></p>
-<p><a href="https://codepen.io/wangcherry/pen/PXXRZd" target="_blank" rel="noopener">查看源码</a></p>
+        <p>在给QDC项目升级时，碰到这样一个报错。server没问题，build时报错</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/4054E39044072326F310B61AA0D366CA.jpg" alt=""></p>
+<p>没有报具体错误，按照报错翻译应该是“遇到未定义的provider，通常意味着有一个循环依赖，可能是由于使用“barrel” index.ts 文件引起的”。<br>于是我检查 provider 使用没有问题，检查了各个模块之间的依赖也没有问题，注意到项目中写了很多index.ts文件，咋一看没有什么问题，比较难发现，但是仔细看index的引用发现barrel使用时有些坑需要注意。</p>
+<h3 id="Barrel"><a href="#Barrel" class="headerlink" title="Barrel"></a>Barrel</h3><p>先介绍一下Barrel，barrel是将多个模块的导出汇总到一个模块的一种方法。barrel本身是一个模块文件，可以重新导出其他模块的选定导出。</p>
+<p>例如有三个模块<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// heroes/hero.component.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> HeroComponent &#123;&#125;</span><br><span class="line"><span class="comment">// heroes/hero.model.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> Hero &#123;&#125;</span><br><span class="line"><span class="comment">// heroes/hero.service.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> HeroService &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.ts</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./hero.model.ts'</span>;   <span class="comment">// re-export all of its exports</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./hero.service.ts'</span>; <span class="comment">// re-export all of its exports</span></span><br><span class="line"><span class="keyword">export</span> &#123; HeroComponent &#125; <span class="keyword">from</span> <span class="string">'./hero.component.ts'</span>; <span class="comment">// re-export the named thing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// used barrel</span></span><br><span class="line"><span class="keyword">import</span> &#123; Hero, HeroService &#125; <span class="keyword">from</span> <span class="string">'../heroes'</span>; <span class="comment">// index is implied</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// without barrel</span></span><br><span class="line"><span class="keyword">export</span> &#123; Hero &#125; <span class="keyword">from</span> <span class="string">'../heroes/hero.model.ts'</span>;</span><br><span class="line"><span class="keyword">export</span> &#123; HeroService &#125; <span class="keyword">from</span> <span class="string">'../heroes/hero.service.ts'</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Barrel的坑"><a href="#Barrel的坑" class="headerlink" title="Barrel的坑"></a>Barrel的坑</h3><p>在导入同一个模块中的文件时使用barrel可以让文件看起来更清爽，但是在使用时需要注意，因为使用不当可能会引起循环依赖。在这个DQC这个项目中，我简化下，还原报错原因。</p>
+<p>目录结构：<br>|—a.service.ts<br>|—b.service.ts<br>|—index.ts</p>
+<p>例如如下使用<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.service.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123;B&#125; <span class="keyword">from</span> <span class="string">'./'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// b.service.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> B &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.ts</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./a.service.ts'</span>;</span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./b.service.ts'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>这样就形成了 A -&gt; barrel -&gt; A</p>
+<h3 id="angular风格指南"><a href="#angular风格指南" class="headerlink" title="angular风格指南"></a>angular风格指南</h3><p>angular团队已经不推荐barrel这种写法，在风格指南已经删除相关写法。</p>
+<p>所以删除项目中的barrel，改为具体文件导入，该问题得到解决。</p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://stackoverflow.com/questions/37997824/angular-di-error-exception-cant-resolve-all-parameters#comment80108487_37997824" target="_blank" rel="noopener">Angular DI Error - EXCEPTION: Can’t resolve all parameters</a><br><a href="https://github.com/angular/angular-cli/issues/7369" target="_blank" rel="noopener">Barrel and Circular dependency</a></p>
 
         
 
         
             <div class="full-width auto-padding tags">
                 
-                    <a href="/blog/tags/html/"><i class="fas fa-tag fa-fw"></i>&nbsp;html</a>
-                
-                    <a href="/blog/tags/css/"><i class="fas fa-tag fa-fw"></i>&nbsp;css</a>
-                
-                    <a href="/blog/tags/js/"><i class="fas fa-tag fa-fw"></i>&nbsp;js</a>
+                    <a href="/blog/tags/typescript/"><i class="fas fa-tag fa-fw"></i>&nbsp;typescript</a>
                 
             </div>
         
@@ -214,6 +187,8 @@
         </div>
     
 </section>
+
+
 
 
 
