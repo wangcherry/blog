@@ -25,7 +25,7 @@ MITM（中间人）代理的技术在实际开发和测试中经常会使用。�
 
 所以我们的实现原理就是**建立一个可以同时与客户端和服务端进行通信的网络服务**。
 
-中间人代理有两种实现形式，一种如下示意图：
+中间人代理有两种实现方式，一种如下示意图：
 
 ![](http://mailshark.nos-jd.163yun.com/document/static/5B345D71EFA7AF8C3DDA5B4FE5434BD7.webp)
 
@@ -66,8 +66,9 @@ const server = http.createServer(request);
 server.listen(8888);
 ```
 
-### TCP隧道
-由于https请求数据在安全层上传输，我们不能像http请求那样直接解析请求报文，但是，我们可以开启一个TCP服务，监听CONNECT请求，因为应用层也是基于传输层的，所以数据在到达应用层之前会首先经过传输层，从而实现传输层数据监听。这种方式就像为客户端和服务器之间打通了一条TCP连接的隧道，作为HTTP代理对隧道里传输的内容一概不予理会，只负责传输。
+另外一种实现方式是TCP隧道：
+
+由于https请求数据在安全层上传输，我们不能像http请求那样直接解析请求报文，但是，我们可以开启一个TCP服务，监听CONNECT请求，因为应用层也是基于传输层的，所以数据在到达应用层之前会首先经过传输层，从而实现传输层数据监听。这种方式就像为客户端和服务器之间打通了一条TCP连接的隧道，作为HTTP代理对隧道里传输的内容一概不予理会，只负责传输。所以隧道代理可以代理所有基于TCP的流量，http数据也是可以监听到，不过会浪费一次TCP连接往返。
 
 TCP隧道连接如下示意图：
 
@@ -110,6 +111,10 @@ openssl genrsa -out private.pem 2048
 openssl req -new -x509 -key private.pem -out public.crt -days 99999
 ```
 安装并信任即可
+
+伪造证书示意图：
+
+![](http://mailshark.nos-jd.163yun.com/document/static/E62F9F910F91BD31926C2DB92DBC6F42.jpg)
 
 那么https代理的实现方案就是：
 
