@@ -134,6 +134,70 @@
             <article class="post reveal ">
     <section class="meta">
         <h2 class="title">
+            <a href="/blog/2019/04/30/nodejs实现http和https代理服务/">
+                
+                    nodejs实现http和https代理服务
+                
+            </a>
+        </h2>
+        <time class="time">
+            <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;2019-04-30
+        </time>
+        
+    
+    <div class="cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+        <a class="categories" href="/blog/categories/前端/">前端</a>
+    </div>
+
+
+    </section>
+
+    <section class="article typo">
+        <h2 id="http-https协议"><a href="#http-https协议" class="headerlink" title="http/https协议"></a>http/https协议</h2><p>HTTP(Hypertext Transfer Protocol，超文本传输协议) 在OSI七层模型属于应用层协议，在网络与传输层使用可靠的数据传输协议TCP/IP，HTTP协议采用明文传输信息的方式。</p>
+<p>HTTPS (Secure Hypertext Transfer Protocol，安全超文本传输协议）是一个安全通信通道，基于HTTP开发，用于在客户端和服务器之间交换信息时采用安全套接字层(SSL)进行信息交换。通俗地讲，HTTPS是HTTP的安全版，即使用了TLS/SSL加密的HTTP协议。</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/8F1DCA29F7FB5FE337DDFA83B6471964.jpg" alt=""></p>
+<p>从上图可以知道HTTPS的分层是在传输层之上建立了安全层，所有的HTTP请求都在安全层上传输。所以对于http代理，我们只需要拦截请求，就可获取到信息，但是对于https代理，我还需要做一些处理才能拿到请求明文信息。更多SSL/TLS协议知识可以参考<a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html" target="_blank" rel="noopener">SSL/TLS协议运行机制的概述</a></p>
+<h2 id="http-https代理原理"><a href="#http-https代理原理" class="headerlink" title="http/https代理原理"></a>http/https代理原理</h2><h3 id="“中间人”代理"><a href="#“中间人”代理" class="headerlink" title="“中间人”代理"></a>“中间人”代理</h3><p>MITM（中间人）代理的技术在实际开发和测试中经常会使用。调试接口、查看HTTP请求与响应时使用的http抓包调试工具如：Fiddler、 Charles，就是基于该原理实现的。用户通过设置代理，网络请求就会通过中间人代理，再发往正式服务器。</p>
+<p>所以我们的实现原理就是<strong>建立一个可以同时与客户端和服务端进行通信的网络服务</strong>。</p>
+<p>中间人代理有两种实现方式，一种如下示意图：</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/5B345D71EFA7AF8C3DDA5B4FE5434BD7.webp" alt=""></p>
+<p>那么http代理的实现方案就是：</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/2B7C00F90320601594FCD623CF6A4B8C.jpg" alt=""></p>
+<p>此时的代理就是“中间人”，代理拦截到请求之后可以修改请求数据，再向服务器发起请求，获取到数据后也可以修改数据，再返回给客户端。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">cReq, cRes</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> u = url.parse(cReq.url);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> options = &#123;</span><br><span class="line">        hostname : u.hostname, </span><br><span class="line">        port     : u.port || <span class="number">80</span>,</span><br><span class="line">        path     : u.path,</span><br><span class="line">        method     : cReq.method,</span><br><span class="line">        headers     : cReq.headers</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> pReq = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">pRes</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// console.log(options);</span></span><br><span class="line">        cRes.writeHead(pRes.statusCode, pRes.headers);</span><br><span class="line">        pRes.pipe(cRes);</span><br><span class="line">    &#125;).on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        cRes.end();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    cReq.pipe(pReq);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(request);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
+<p>另外一种实现方式是TCP隧道：</p>
+<p>由于https请求数据在安全层上传输，我们不能像http请求那样直接解析请求报文，但是，我们可以开启一个TCP服务，监听CONNECT请求，因为应用层也是基于传输层的，所以数据在到达应用层之前会首先经过传输层，从而实现传输层数据监听。这种方式就像为客户端和服务器之间打通了一条TCP连接的隧道，作为HTTP代理对隧道里传输的内容一概不予理会，只负责传输。所以隧道代理可以代理所有基于TCP的流量，http数据也是可以监听到，不过会浪费一次TCP连接往返。</p>
+<p>TCP隧道连接如下示意图：</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/8D7EDB84587FE23E1CB02664AE71A948.webp" alt=""></p>
+<p>那么隧道连接代码实现方案：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">cReq, cSock</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> u = url.parse(<span class="string">'http://'</span> + cReq.url);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> pSock = net.connect(u.port, u.hostname, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// console.log(u);</span></span><br><span class="line">        cSock.write(<span class="string">'HTTP/1.1 200 Connection Established\r\n\r\n'</span>);</span><br><span class="line">        pSock.pipe(cSock);</span><br><span class="line">    &#125;).on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        cSock.end();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    cSock.pipe(pSock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer();</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'connect'</span>, connect);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
+<p>最后，我们还需要支持域名证书验证，才能拿到https的请求明文信息。域名证书 是每个支持HTTPS网站都需要有的一份证书，用于客户端验证该网站的安全性，而该证书通常是通过安全机构申请的，这个机构就是 CA（Certificate Authority，证书颁发机构）。在每台用户计算机的操作系统或浏览器中，都会保存一份CA列表，也就是有多个根证书，不同CA分别包含了不同的域名证书，浏览器在获取到域名证书之后，会向CA根证书进行验证，如果验证通过则能正常收发请求。所以我们需要在代理服务器上伪造证书，实现方案是，node生成根证书，安装并信任，在拦截到https请求时，我们利用根证书动态签发域名证书，并将证书返回给浏览器，浏览器验证证书，由于域名证书是我们信任的根证书签发的，所以会验证通过。于是我们也能解析请求报文了。</p>
+<p>生成根证书：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out private.pem 2048</span><br><span class="line">openssl req -new -x509 -key private.pem -out public.crt -days 99999</span><br></pre></td></tr></table></figure></p>
+<p>安装并信任即可</p>
+<p>伪造证书示意图：</p>
+<p><img src="http://mailshark.nos-jd.163yun.com/document/static/E62F9F910F91BD31926C2DB92DBC6F42.jpg" alt=""></p>
+<p>那么https代理的实现方案就是：</p>
+<p><img src="" alt=""></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">cReq, cRes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> u = url.parse(cReq.url);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> options = &#123;</span><br><span class="line">    hostname : u.hostname, </span><br><span class="line">    port     : u.port || <span class="number">80</span>,</span><br><span class="line">    path     : u.path,       </span><br><span class="line">    method   : cReq.method,</span><br><span class="line">    headers  : cReq.headers</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> pReq = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">pRes</span>) </span>&#123;</span><br><span class="line">    cRes.writeHead(pRes.statusCode, pRes.headers);</span><br><span class="line">    pRes.pipe(cRes);</span><br><span class="line">  &#125;).on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    cRes.end();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  cReq.pipe(pReq);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">cReq, cSock</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> u = url.parse(<span class="string">'http://'</span> + cReq.url);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> pSock = net.connect(u.port, u.hostname, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    cSock.write(<span class="string">'HTTP/1.1 200 Connection Established\r\n\r\n'</span>);</span><br><span class="line">    pSock.pipe(cSock);</span><br><span class="line">  &#125;).on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    cSock.end();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  cSock.pipe(pSock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">  key  : fs.readFileSync(<span class="string">'./private.pem'</span>),</span><br><span class="line">  cert : fs.readFileSync(<span class="string">'./public.crt'</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = https.createServer(options)</span><br><span class="line">server.on(<span class="string">'request'</span>, request)</span><br><span class="line">server.on(<span class="string">'connect'</span>, connect)</span><br><span class="line">server.listen(<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
+        
+
+        
+            <div class="full-width auto-padding tags">
+                
+                    <a href="/blog/tags/node/"><i class="fas fa-tag fa-fw"></i>&nbsp;node</a>
+                
+            </div>
+        
+    </section>
+</article>
+
+        </div>
+    
+        <div class="post-wrapper">
+            <article class="post reveal ">
+    <section class="meta">
+        <h2 class="title">
             <a href="/blog/2019/04/08/barrel文件引起循环依赖/">
                 
                     barrel文件引起循环依赖
@@ -388,7 +452,7 @@
         
             <ul class="entry">
                 
-                    <li><a class="flat-box" href="/blog/categories/前端/"><div class="name">前端</div><div class="badge">3</div></a></li>
+                    <li><a class="flat-box" href="/blog/categories/前端/"><div class="name">前端</div><div class="badge">4</div></a></li>
                 
             </ul>
         
@@ -403,7 +467,7 @@
             <div><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;标签</div>
         </header>
         <div class="content pure">
-            <a href="/blog/tags/css/" style="font-size: 14px; color: #999">css</a> <a href="/blog/tags/html/" style="font-size: 14px; color: #999">html</a> <a href="/blog/tags/js/" style="font-size: 14px; color: #999">js</a> <a href="/blog/tags/typescript/" style="font-size: 24px; color: #555">typescript</a>
+            <a href="/blog/tags/css/" style="font-size: 14px; color: #999">css</a> <a href="/blog/tags/html/" style="font-size: 14px; color: #999">html</a> <a href="/blog/tags/js/" style="font-size: 14px; color: #999">js</a> <a href="/blog/tags/node/" style="font-size: 14px; color: #999">node</a> <a href="/blog/tags/typescript/" style="font-size: 24px; color: #555">typescript</a>
         </div>
     </section>
 
