@@ -1,28 +1,28 @@
 const http = require('http');
 const url = require('url');
 
-function request(cReq, cRes) {
-    const u = url.parse(cReq.url);
+function request(req, res) {
+    const u = url.parse(req.url);
 
     const options = {
         hostname : u.hostname, 
         port     : u.port || 80,
         path     : u.path,
-        method     : cReq.method,
-        headers     : cReq.headers
+        method   : req.method,
+        headers  : req.headers
     };
 
-    const pReq = http.request(options, function(pRes) {
-        // console.log(options);
-        cRes.writeHead(pRes.statusCode, pRes.headers);
-        pRes.pipe(cRes);
+    const proxyReq = http.request(options, function(proxyRes) {
+        console.log('http proxy：' + options.hostname);
+        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        proxyRes.pipe(res);
     }).on('error', function(e) {
-        cRes.end();
+        res.end();
     });
 
-    cReq.pipe(pReq);
+    req.pipe(proxyReq);
 }
 
-const server = http.createServer(request);
+const proxy = http.createServer(request);
 
-server.listen(8888);
+proxy.listen(8888);
