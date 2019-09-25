@@ -1,0 +1,25 @@
+{
+  "name": "my-cli",
+  "version": "1.0.0",
+  "description": "cli tool",
+  "bin": {
+    "sr": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wangcherry/blog",
+    "directory": "demo/cli"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^3.0.1",
+    "cross-spawn": "^7.0.0",
+    "envinfo": "^7.4.0",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.0"
+  }
+}
