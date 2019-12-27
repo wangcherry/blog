@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>monaco</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .monaco-scrollable-element {
+            width: 200px;
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid #d9d9d9;
+            margin: 20px auto;
+            box-sizing: content-box;
+        }
+        .monaco-list-rows {
+            position: relative;
+        }
+        .monaco-list-rows .monaco-list-row {
+            height: 20px;
+            line-height: 20px;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            padding: 0 20px;
+        }
+        .monaco-list-rows .monaco-list-row:hover {
+            background-color: #fafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="monaco-scrollable-element"></div>
+
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        (() => {
+            const originArr = [];
+            const viewH = 500;
+            const itemH = 20;
+            const monacoScrollableElement = $('.monaco-scrollable-element');
+            for (let index = 0; index < 1000000; index++) {
+                originArr.push(index);
+            };
+
+            updateView(0);
+
+            function updateView(currTop) {
+                if(currTop + viewH > originArr.length * itemH) return;
+                const activeArr = originArr.slice(Math.floor(currTop/itemH), Math.floor((currTop + viewH)/itemH));
+                const lis = monacoScrollableElement.find('li.monaco-list-row');
+                const monacoListRows = $('<ul class="monaco-list-rows"></ul>');
+
+                for(i = 0; i < activeArr.length; i++) {
+                    if(lis.length === 0) {
+                        monacoListRows.css({'height': originArr.length * itemH});
+
+                        const li = $(`<li class="monaco-list-row">${activeArr[i]}</li>`);
+                        li.css({'top': currTop + itemH * i + 'px'});
+                        monacoListRows.append(li);
+                    }else {
+                        const li = lis.eq(i);
+                        li.text(activeArr[i]);
+                        li.css({'top': currTop + itemH * i + 'px'});
+                    }
+                }
+                lis.length === 0 && monacoScrollableElement.append(monacoListRows);
+            }
+            monacoScrollableElement.scroll(e => {
+                updateView(e.target.scrollTop);
+                console.log('scrollTop: ',e.target.scrollTop)
+            })
+        })()
+    </script>
+</body>
+</html>
