@@ -176,7 +176,7 @@
 </ol>
 <h2 id="方案设计"><a href="#方案设计" class="headerlink" title="方案设计"></a>方案设计</h2><p>基于以上的目标，我们来看一下整个工程化的方案设计。</p>
 <p>首先，我们看一下整个方案的架构图：</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/4ED8437D499BE0C953BA887896ACD97C.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/1.jpg" title="This is an image">
 <h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>我们可以看到整个架构图分为四层：</p>
 <h4 id="底层依赖"><a href="#底层依赖" class="headerlink" title="底层依赖"></a>底层依赖</h4><p>最底层依赖了规范、webpack、schematics、node，它是上次架构的基石。规范这里包括了项目规范和流程规范，是我们整套方案需要遵守的一些约定；schematics 引入主要是为了解决上面说到的文件处理那块的痛点问题，后面会详细讲到。</p>
 <h4 id="插件封装层"><a href="#插件封装层" class="headerlink" title="插件封装层"></a>插件封装层</h4><p>这一层主要是对上层需要实现的功能做一个划分，然后通过插件的形式实现。例如：我们将一系列模板做一个抽离，然后这一系列模板在初始化的时候需要做的模板处理放到 init 插件中完成；我们的开发编译阶段需要的 webpack 和server脚本我们就可以放在 @sharkr/scripts 插件中完成；前面说到的资源复用和资源升级问题，我把它叫做文件处理相关的，就抽离在 @sharkr/schematics-cli 插件中完成；还有一部分插件就是比较共用的方法抽离了 util 插件，方便共享；</p>
@@ -199,7 +199,7 @@
 <h4 id="init-插件"><a href="#init-插件" class="headerlink" title="init 插件"></a>init 插件</h4><p>我们每个团队都会有一些常用的业务场景，例如我们B端，会维护好几个模板，纯 web 的、带 node server 的、应用于微应用的，那么这一系列我们作为一个集合，配套的我们会出一个相应的 init 插件，这个插件可以完成我这部分模板的初始化处理。假如说其他团队也有自己的模板，那么同样的，他也可以提供模板配套的 init 插件供 cli 调用。</p>
 <p>这是插件的一个好处，可以方便扩展自定义的部分，但是它也带来了一个小问题，例如，这部分插件不是很稳定，可能经常需要更新，它的频繁更新会给用户带来影响。</p>
 <h4 id="插件更新"><a href="#插件更新" class="headerlink" title="插件更新"></a>插件更新</h4><p>我们先看一下我们最初采用的插件更新机制，如下图：</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/4FC4930E8E03B13FA8D8A262B5DC2912.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/2.jpg" title="This is an image">
 <ol>
 <li>用户执行 sr init myapp，调用 @sharkr/cli </li>
 <li>@sharkr/cli 检查init插件版本</li>
@@ -212,7 +212,7 @@
 <blockquote>
 <p>npx 是 npm5.2 版本中新增的命令，它能临时下载一个模块并且运行它，运行之后再删除这个模块</p>
 </blockquote>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/666496AD507AC551D084740F8ECD1991.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/3.jpg" title="This is an image">
 <ol>
 <li>用户执行 sr init myapp，调用 @sharkr/cli </li>
 <li>@sharkr/cli 使用 npx 调用最新的 init 插件处理</li>
@@ -222,11 +222,11 @@
 <h3 id="开发-迭代"><a href="#开发-迭代" class="headerlink" title="开发/迭代"></a>开发/迭代</h3><p>完成项目初始化进入开发阶段，我们遇到的第一个问题就是 dev 环境，例如我们需要 webpack 配置编译代码，需要一个本地 server，需要一个数据转发等，这一部分很好解决，我们通过 @sharkr/scripts 提供 webpack 和 server 脚本，在模板里集成调用，用 koa 起一个本地服务，koa 中间件完成转发等。这个很好解决，反而是前面说到的资源复用和资源/项目升级，我们怎么解决呢。下面我们重点解释一下。</p>
 <h4 id="资源复用"><a href="#资源复用" class="headerlink" title="资源复用"></a>资源复用</h4><p>我把资源分为两类，一类是有固定输入输出，可抽离的，例如时间控件，下拉列表等；还有一类是无固定输入输出，不可抽离，但是又具有某些共性的，例如B端常见的列表页、详情页，这一部分资源没有一个很好的复用方式。</p>
 <p>对于第一类资源，我们可以采用封装组件的形式完成资源共享：</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/277820A3C2937B7260B52B5022C95EC5.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/4.jpg" title="This is an image">
 <p>对于第二类资源，我们以前的做法基本是 Ctrl+c、Ctrl+v 来复用，这种做法不够高级，还效率不高，所以我们 cli 提供的第二种做法，那就是将代码模板抽离到一个 schematic 包里，然后通过 @sharkr/cli 来安装这个包，并且执行里面的 schematic。</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/A55122BF372983A7BEBA45604145852B.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/5.jpg" title="This is an image">
 <h4 id="资源-项目升级"><a href="#资源-项目升级" class="headerlink" title="资源/项目升级"></a>资源/项目升级</h4><p>同样的，假如我们的项目或者是资源需要升级，就需要在项目中升级依赖，可能还需要修改配置、甚至调整目录结构、修改api调用等。这种升级我们以前的做法是，出一份升级文档，升级者按照文档一步步修改项目完成升级。假如有几十个项目，就需要几十个人做相同的事几十遍，这无疑是一个大的人力消耗，我们作为一个提效工具，就是需要将这部分重复的工作通过代码完成。</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/8F53EBB061F0D2214458662566A1F85B.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/6.jpg" title="This is an image">
 <ul>
 <li>把升级文档里做的事情编写成 schematic 包</li>
 <li>通过 @sharkr/cli 来安装这个包，并且执行里面的 schematic</li>
@@ -248,7 +248,7 @@
 <p>schematics 不妨碍你使用 node 包，它只是对文件处理做了增强。</p>
 <h5 id="schematics-封装"><a href="#schematics-封装" class="headerlink" title="schematics 封装"></a>schematics 封装</h5><p>既然 schematics 处理文件很友好，而且刚好能解决我们的问题，于是我们就引入了 schematics 完成文件处理，并对它做了一层封装。</p>
 <p>下面我们来看下，开发和使用一个 schematics 包需要做点什么呢？</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/0576804849345AE8073F63B4C7D39BD1.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/7.jpg" title="This is an image">
 <p>首先，对于开发者来说，需要做以下三步：</p>
 <ol>
 <li>根据 schematics 规范开发一个 schematics 包</li>
@@ -271,9 +271,9 @@
 </ol>
 <p>这里 Rule 函数是需要开发者实现的，任何你想写成文档的都能通过代码方式写在这个 Rule 函数里。</p>
 <h5 id="schematics-实践"><a href="#schematics-实践" class="headerlink" title="schematics 实践"></a>schematics 实践</h5><p>下面我们来看一个实际的例子：前段时间我们的项目都需要完成服务上云，为了实现上云，我们需要调整下CI脚本，还要往项目里放一些环境配置文件，涉及到多处文件修改和增加，所以我们写了一个 @sharkr/ng-cloud-add 的 schematics 包达到快速改造项目的目的。以下是效果：</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/8FDF86801822A205FA857F680DE70D8D.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/8.jpg" title="This is an image">
 <p>核心代码写起来跟写文档类似：</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/191620D84BD0257591D4FDCB48502F09.jpg" alt=""></p>
+<img src="/blog/2019/12/24/严选工程化实践/9.jpg" title="This is an image">
 <p>以上就讲完了我们在开发/迭代过程中遇到的问题和解决方案，最后我们再看一下CICD阶段做了什么</p>
 <h3 id="CI"><a href="#CI" class="headerlink" title="CI"></a>CI</h3><p>这部分跟 dev 环境类似，也是提供 webpack 配置、build 脚本、还约束了 build 打包后的目录规范。</p>
 <h2 id="价值与后续计划"><a href="#价值与后续计划" class="headerlink" title="价值与后续计划"></a>价值与后续计划</h2><h3 id="价值"><a href="#价值" class="headerlink" title="价值"></a>价值</h3><p>通过介绍以上的一些方案设计，可以发现这套工具可以让开发更专注业务本身，初始化项目之后就可以直接进入开发；重复的Ctrl+c、Ctrl+v可以通过 schematics 完成，省去重复的人力成本；项目/资源升级可以更加快速推进；规范和文档沉淀到工具中供使用，非常有利于规范的遵守。</p>

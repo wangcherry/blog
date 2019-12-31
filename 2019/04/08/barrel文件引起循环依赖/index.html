@@ -155,7 +155,7 @@
 
         <div class="article-entry" itemprop="articleBody">
             <p>在给QDC项目升级时，碰到这样一个报错。server没问题，build时报错</p>
-<p><img src="http://mailshark.nos-jd.163yun.com/document/static/4054E39044072326F310B61AA0D366CA.jpg" alt=""></p>
+<img src="/blog/2019/04/08/barrel文件引起循环依赖/1.jpg" title="This is an image">
 <p>没有报具体错误，按照报错翻译应该是“遇到未定义的provider，通常意味着有一个循环依赖，可能是由于使用“barrel” index.ts 文件引起的”。<br>于是我检查项目中的 provider 使用没有问题，检查了各个模块之间的依赖也没有问题，注意到项目中写了很多index.ts文件，咋一看没有什么问题，比较难发现，但是仔细看index的引用发现barrel使用时有些坑需要注意。</p>
 <h3 id="Barrel"><a href="#Barrel" class="headerlink" title="Barrel"></a>Barrel</h3><p>先介绍一下Barrel，barrel是将多个模块的导出汇总到一个模块的一种方法。barrel本身是一个模块文件，可以重新导出其他模块的选定导出。</p>
 <p>例如有三个模块<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// heroes/hero.component.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> HeroComponent &#123;&#125;</span><br><span class="line"><span class="comment">// heroes/hero.model.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> Hero &#123;&#125;</span><br><span class="line"><span class="comment">// heroes/hero.service.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> HeroService &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.ts</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./hero.model.ts'</span>;   <span class="comment">// re-export all of its exports</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./hero.service.ts'</span>; <span class="comment">// re-export all of its exports</span></span><br><span class="line"><span class="keyword">export</span> &#123; HeroComponent &#125; <span class="keyword">from</span> <span class="string">'./hero.component.ts'</span>; <span class="comment">// re-export the named thing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// used barrel</span></span><br><span class="line"><span class="keyword">import</span> &#123; Hero, HeroService &#125; <span class="keyword">from</span> <span class="string">'../heroes'</span>; <span class="comment">// index is implied</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// without barrel</span></span><br><span class="line"><span class="keyword">export</span> &#123; Hero &#125; <span class="keyword">from</span> <span class="string">'../heroes/hero.model.ts'</span>;</span><br><span class="line"><span class="keyword">export</span> &#123; HeroService &#125; <span class="keyword">from</span> <span class="string">'../heroes/hero.service.ts'</span>;</span><br></pre></td></tr></table></figure></p>
@@ -170,9 +170,9 @@
         </div>
 
         <section class="meta">
-            <time class="time" itemprop="dateUpdated" datetime="2019-04-09T10:31:26+08:00" content="2019-04-09">
+            <time class="time" itemprop="dateUpdated" datetime="2019-12-31T17:21:32+08:00" content="2019-12-31">
                 <i class="fas fa-pen fa-fw" aria-hidden="true"></i>
-                本文最后更新于：2019-04-09
+                本文最后更新于：2019-12-31
             </time>
             
                 
