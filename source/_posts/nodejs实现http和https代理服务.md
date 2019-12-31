@@ -30,13 +30,13 @@ MITM（中间人）代理在实际开发和测试中经常会使用。调试接�
 
 中间人代理示意图（来源于《HTTP权威指南》）：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/5B345D71EFA7AF8C3DDA5B4FE5434BD7.webp)
+{% asset_img 1.webp This is an image %}
 
 HTTP客户端会向代理发送请求报文，代理服务器必须像Web服务器一样，正确的处理请求和连接，然后返回响应。同时，代理自身要向服务器发送请求，这样，其行为就必须像正确的HTTP客户端一样，要发送请求并接受响应。
 
 那么http代理的实现方案就是：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/2B7C00F90320601594FCD623CF6A4B8C.jpg)
+{% asset_img 2.jpg This is an image %}
 
 此时的代理就是“中间人”，代理拦截到请求之后可以修改请求数据，再向服务器发起请求，获取到数据后也可以修改数据，再返回给客户端。当然，代理也可以不向服务器发起请求，而是直接返回本地的数据，那就是数据mock。
 
@@ -76,7 +76,7 @@ proxy.listen(8888);
 
 上面已经完成了HTTP代理，那么是不是将HTTP换成HTTPS就能实现HTTPS代理呢？答案是不能，首先我们来看下HTTP和HTTPS去区别：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/8F1DCA29F7FB5FE337DDFA83B6471964.jpg)
+{% asset_img 3.jpg This is an image %}
 
 从上图可以知道HTTPS的分层是在传输层之上建立了安全层，所有的HTTP请求都在安全层上传输。所以对于http代理，我们只需要拦截请求，就可获取到报文信息从而完成转发。但是对于https请求，我们无法获取安全层数据。更多SSL/TLS协议知识可以参考[SSL/TLS协议运行机制的概述](http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)
 
@@ -86,11 +86,11 @@ CONNECT方法请求隧道网关创建一条到达任意目的服务器和端口�
 
 下图显示了CONNECT方法如何建立一条到达网关的隧道（来源于《HTTP权威指南》）：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/8D7EDB84587FE23E1CB02664AE71A948.webp)
+{% asset_img 4.webp This is an image %}
 
 那么隧道代理的实现方案就是：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/65715FEE17BEE76A566731B117BB29D1.jpg)
+{% asset_img 5.jpg This is an image %}
 
 第一步：客户端像http代理发起CONNECT请求。
 第二步：http代理接收到CONNECT请求后与abc.com的433端口建立tcp连接。
@@ -165,7 +165,7 @@ proxy.listen(8888, '127.0.0.1', () => {
 
 客户端验证服务器证书示意图：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/0C79160D00CC86678172657A77CDC566.jpg)
+{% asset_img 6.jpg This is an image %}
 
 由于代理服务器并没有合法的域名证书（证书只存在真实目标服务器，无法获取到），所以我们需要在代理服务器上伪造证书，实现方案是，node生成根证书，安装并信任，在拦截到https请求时，我们利用根证书动态签发域名证书，并将证书返回给浏览器，浏览器验证证书，由于域名证书是我们信任的根证书签发的，所以会验证通过。
 
@@ -180,7 +180,7 @@ openssl req -new -x509 -key private.pem -out public.crt -days 99999
 
 报文信息加密解密示意图（简化版）：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/27FC7C77CBEC7A774610F33BBBD7DDA4.jpg)
+{% asset_img 7.jpg This is an image %}
 
 1，建立连接时，客户端发起请求；代理拦截后生成域名证书B和私钥b，并用私钥b给证书B签名；同时，代理跟服务器建立连接；服务器用私钥a给证书A签名，并返回给代理；代理将证书B返回给客户端。随后客户端随机生成主密钥M，并用证书B加密，由主密钥生成会话密钥Q；代理拦截后用私钥b解密获得主密钥M，并随机生成主密钥N，用证书A加密发往服务器，并由主密钥生成会话密钥P；服务器解密获得主密钥N。
 2，完成连接后，客户端用会话密钥Q加密请求；代理拦截后解密获得明文信息，再用会话密钥P加密发往服务器；服务器解密获得明文信息，返回数据；

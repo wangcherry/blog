@@ -46,18 +46,18 @@ console.log('my cli！');
 ```
 执行命令后，my-cli会根据package.json上的配置，**sr** 命令被链接到全局。[更多npm link知识](https://docs.npmjs.com/cli/link)
 
-![](http://mailshark.nos-jd.163yun.com/document/static/A77FE816820FE0772924C4959AD1C58D.png)
+{% asset_img npm-link.png This is an image %}
 
 这时在任何目录执行 **sr** 将会看到：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/F5E934A2E47C6E0DD6EB812ABE66DF27.png)
+{% asset_img sr.png This is an image %}
 
 到这里就可以开始开发 cli 了，./bin/index.js 的更改会实时同步到全局命令的。
 
 ### 获取参数
 有了命令，那么具体子命令怎么执行呢？例如我输入 **sr info** 时希望能打印当前环境信息。效果如下：
 
-![](http://mailshark.nos-jd.163yun.com/document/static/155BDFD1FE854AECEC21D1BB7CFF0EF7.png)
+{% asset_img info.png This is an image %}
 
 首先，我们需要获取参数，因为知道是 info 命令，才能执行打印环境信息操作。那么怎么获取命令行参数呢？下面介绍用原始方法和使用模块获取命令行参数：
 
@@ -216,7 +216,7 @@ program
 ```
 执行 **sr init my-app**
 
-![](http://mailshark.nos-jd.163yun.com/document/static/09F7F96889D31DAE9F9DB645D16C5292.gif)
+{% asset_img init.gif This is an image %}
 
 init 命令提供一个配置项 type 设置需要拉取的模板类型，我们可以执行 **sr init my-app** 初始化项目，没设置 type 时需要选择模板类型。执行 **sr init my-app -t full** 时直接拉取full模板。
 在实际开发中，可以根据模板的用途做更多的特性选择和处理。

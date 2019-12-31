@@ -9,7 +9,7 @@ tags:
 
 在给QDC项目升级时，碰到这样一个报错。server没问题，build时报错
 
-![](http://mailshark.nos-jd.163yun.com/document/static/4054E39044072326F310B61AA0D366CA.jpg)
+{% asset_img 1.jpg This is an image %}
 
 没有报具体错误，按照报错翻译应该是“遇到未定义的provider，通常意味着有一个循环依赖，可能是由于使用“barrel” index.ts 文件引起的”。
 于是我检查项目中的 provider 使用没有问题，检查了各个模块之间的依赖也没有问题，注意到项目中写了很多index.ts文件，咋一看没有什么问题，比较难发现，但是仔细看index的引用发现barrel使用时有些坑需要注意。
