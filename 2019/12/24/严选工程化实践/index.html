@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>小英英的博客</title>
+  <title>严选工程化实践 | 小英英的博客</title>
   
   <meta name="HandheldFriendly" content="True">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,7 +129,7 @@
             <article id="post-严选工程化实践" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
     <section class="meta">
         
-            <h1 class="title">2019-12-24</h1>
+            <h1 class="title">严选工程化实践</h1>
         
         <time class="time">
             <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
@@ -142,30 +142,208 @@
         
 
         
+    
+    <div class="cats">
+        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+        <a class="categories" href="/blog/categories/前端/">前端</a>
+    </div>
+
 
     </section>
 
     <section class="article typo">
 
         <div class="article-entry" itemprop="articleBody">
-            <!-- ---
-title: 严选工程化实践
-date: 2019-12-24 17:30:50
-categories:
-    - 前端
-tags: 
-    - node
-    - cli
-    - 方案设计
---- -->
+            <blockquote>
+<p>前端日益发展，从最初的 HTML、CSS、JavaScript 三大基础，到后来的jQuery、Backbone、AngularJS，再到现在的 Angular、React、Vue 三大框架流行，技术的演进既带来了更多的可能，也带来了一些问题。例如：团队如何高效合作、项目如何统一维护、代码如何规范等等。前端工程化的出现，就是为了解决这些日益突出的问题。它旨在制订规范化的前端工作流，并规范统一项目的模块化开发和前端资源，让代码的维护和互相协作更加容易更加方便。</p>
+</blockquote>
+<p>今年我们团队由 angular 技术栈转变成 react 技术栈，在这个大背景下，我们急需一套完善的工程化方案来帮助技术栈落地。在通过确定目标、定义规范、技术调研、开发实现等一系列步骤之后，制定了一套完善的工程化方案。它帮助解决开发流程中的问题，让开发更加专注业务本身，提高整个系统生产效率。</p>
+<h1 id="1-目标定义"><a href="#1-目标定义" class="headerlink" title="1. 目标定义"></a>1. 目标定义</h1><p>作为一个工程化方案，最终的目标是尽可能解决项目生命周期里遇到的问题，例如：</p>
+<ol>
+<li><p>规范保障</p>
+<p> 每个团队都会根据实践经验，总结出一套自己的规范（项目规范和流程规范）。让这一套规范在落地到实际的开发中时，除了人为的约束，更多的应该是通过工具约束。工程化就是把团队的经验沉淀到脚手架和开发套件中，让新项目或新成员可以复用这些经验。</p>
+</li>
+<li><p>提效</p>
+<p> 一个好的工程化方案，是可以提升开发效率的，这个提效包括初始化项目，完备项目的dev环境，数据mock，build打包等一系列流程，既要让项目“搭建-开发-部署”更快捷高效，也要方便项目的后期维护和迭代。</p>
+</li>
+<li><p>减少人力</p>
+<p> 在开发过程中可能会遇到一些重复人力的工作。例如A、B两个系统有一个相似的列表页，这个列表页不能作为组件抽离，但是又在多处能用到，这部分资源（代码模板）复用急需一个中间媒介来完成。</p>
+<p> 假如资源/项目需要升级了，大多情况是资源开发者出一个升级文档，然后升级的人按照文档一步步修改。这是很重复的一份工作，因为假如你手上有十个项目，你就需要把相同的事情做十遍，这一步重复的工作我们希望可以通过工具来完成。</p>
+</li>
+</ol>
+<p>同时，我们的工程化方案应该符合以下四个特点：</p>
+<ol>
+<li>渐进式（技术演化能力）易于迭代</li>
+<li>扩展性（可伸缩、可插拔）易于部门共建</li>
+<li>易用性（贴合实际）易落地</li>
+<li>数据统计与分析</li>
+</ol>
+<h1 id="2-方案设计"><a href="#2-方案设计" class="headerlink" title="2. 方案设计"></a>2. 方案设计</h1><p>基于以上的目标，下面来看一下整个工程化的方案设计。</p>
+<p>首先，介绍整个方案的架构图：</p>
+<img src="/blog/2019/12/24/严选工程化实践/1.jpg" title="This is an image">
+<h2 id="2-1-架构图"><a href="#2-1-架构图" class="headerlink" title="2.1 架构图"></a>2.1 架构图</h2><p>可以看到整个架构图分为四层：</p>
+<h3 id="2-1-1-底层依赖"><a href="#2-1-1-底层依赖" class="headerlink" title="2.1.1 底层依赖"></a>2.1.1 底层依赖</h3><p>最底层依赖了规范、webpack、schematics、node、eslint，它是上次架构的基石。</p>
+<ul>
+<li><p>规范这里包括了项目规范和流程规范，是整套方案需要遵守的约定；</p>
+<p>  因为这套规范是根据大量的实际业务总结出来的，所以它是贴合业务场景，便于整体方案落地的。</p>
+</li>
+<li><p>schematics 引入主要是为了解决上面说到的资源相关的问题，后面会详细讲到。</p>
+</li>
+</ul>
+<h3 id="2-1-2-插件封装层"><a href="#2-1-2-插件封装层" class="headerlink" title="2.1.2 插件封装层"></a>2.1.2 插件封装层</h3><p>这一层主要是对上层需要实现的功能做一个划分，然后通过插件的形式实现。例如：</p>
+<ul>
+<li>将一系列模板抽离作为一个集合，然后将项目初始化时需要做的模板选择和模板处理放到 init 插件中完成，不同团队可以根据规范自定义插件；</li>
+<li>开发编译阶段需要的 webpack 和 server、build 脚本放在 @sharkr/scripts 插件中完成，不同团队可以根据规范自定义插件；</li>
+<li>前面说到的资源复用和资源升级问题，统称为文件处理相关，@sharkr/schematics-cli 插件提供这个能力；</li>
+<li>@sharkr/eslint-config-react 插件提供 eslint 检查；</li>
+<li>还有一部分公共能力封装成 util 插件，方便共享。</li>
+</ul>
+<p>这种插件的方式可以使工具具有很强的扩展性，在跟其他团队共建时，可以很方便的做一些自定义，但是又符合统一的规范。</p>
+<h3 id="2-1-3-统一命令层"><a href="#2-1-3-统一命令层" class="headerlink" title="2.1.3 统一命令层"></a>2.1.3 统一命令层</h3><p>第三层是统一命令层，这一层做的事情就是，最终对用户暴露一个统一的工具 @sharkr/cli ，在 cli 里去规范常用的一些命令，当然这些命令的具体实现都是调用下一层的插件。这些命令会应用到项目开发的生命周期中去。</p>
+<p>在这一层中会添加埋点，用于收集命令、项目、使用包等相关情况，以便做数据的统计与分析，了解实际落地情况，也为未来迭代版本提供有效参考。</p>
+<h3 id="2-1-4-项目生命周期"><a href="#2-1-4-项目生命周期" class="headerlink" title="2.1.4 项目生命周期"></a>2.1.4 项目生命周期</h3><p>项目生命周期，就是指项目从初始化，到开发（或后期迭代），再到CICD的这么一个周期。可以看到下一层的命令大多都可以对应到项目生命周期中，例如：</p>
+<ul>
+<li>init 完成项目初始化</li>
+<li>dev 可以使开发者快速的进入开发</li>
+<li>add 可以给项目增加一个资源</li>
+<li>generate 可以执行资源里定义的命令</li>
+<li>update 帮助快速升级资源</li>
+<li>lint 编码规范校验</li>
+<li>test 对开发过程中的代码做一个测试</li>
+<li>build 在CI阶段可以帮助完成编译打包</li>
+</ul>
+<p>通过这整个架构可以看到，我们的工具可以介入到项目生命周期里的所有环节，那么这些环节有的一些问题和痛点，也可以通过工具去解决。下面将会从项目生命周期的角度讲解一下我们工程化的一个具体方案。</p>
+<h2 id="2-2-项目初始化"><a href="#2-2-项目初始化" class="headerlink" title="2.2 项目初始化"></a>2.2 项目初始化</h2><p>首先，在项目初始化过程中需要解决的一个问题就是：帮助规范落地。</p>
+<p>把规范分为项目规范和流程规范，流程规范上面也介绍了，通过工具做了一个约束，那么项目规范怎么在初始化的时候落地呢？</p>
+<p>我们的做法是，将这部分规范落地到模板当中，用户通过 @sharkr/cli 去 init 项目，选择合适的模板，init 插件完成模板处理，然后就初始化了一个符合规范的项目。</p>
+<p>这里提到选择合适模板，init 插件完成模板处理，那 init 插件是怎么做的呢？</p>
+<h3 id="2-2-1-init-插件"><a href="#2-2-1-init-插件" class="headerlink" title="2.2.1 init 插件"></a>2.2.1 init 插件</h3><p>每个团队都会有一些常用的业务场景，例如我们B端，会维护好几个模板，纯 web 的、带 node server 的、应用于微应用的，那么这一系列模板作为一个集合，配套的会出一个相应的 init 插件，这个插件可以完成这系列模板的初始化处理。</p>
+<p>执行 init 命令时，cli 调用对应的 init 插件，用户根据提示输入项目相关配置项，init 插件根据配置项处理模板。</p>
+<p>假如说其他团队也有自己的模板，那么同样的，他们也可以根据规范提供模板配套的 init 插件供 cli 调用，方便共建。</p>
+<p>这是插件的一个优势，可以方便扩展自定义的部分，但是它也带来了一个小问题。这部分插件不是很稳定，可能经常需要更新，它的频繁更新会给用户带来影响。这就需要有一个较好的插件更新机制，方便迭代。</p>
+<h3 id="2-2-2-插件更新"><a href="#2-2-2-插件更新" class="headerlink" title="2.2.2 插件更新"></a>2.2.2 插件更新</h3><p>先来看一下最初采用的插件更新机制，如下图：</p>
+<img src="/blog/2019/12/24/严选工程化实践/2.jpg" title="This is an image">
+<ol>
+<li>用户执行 sr init myapp，调用 @sharkr/cli </li>
+<li>@sharkr/cli 检查 init 插件版本</li>
+<li>发现版本不是最新的，提示用户 update @sharkr/cli</li>
+<li>用户全局 update @sharkr/cli</li>
+<li>再次执行 sr init myapp, 调用 @sharkr/cli</li>
+<li>@sharkr/cli 调用最新的 init 处理</li>
+</ol>
+<p>这种方式需要用户经常手动更新，不是很友好，所以在后来方案设计时，改用了 npx 的方式调用 init 插件</p>
+<blockquote>
+<p>npx 是 npm5.2 版本中新增的命令，它能临时下载一个模块并且运行它，运行之后再删除这个模块</p>
+</blockquote>
+<img src="/blog/2019/12/24/严选工程化实践/3.jpg" title="This is an image">
+<ol>
+<li>用户执行 sr init myapp，调用 @sharkr/cli </li>
+<li>@sharkr/cli 使用 npx 调用最新的 init 插件处理</li>
+</ol>
+<p>通过方案二，可以看到使用 npx 的方式调用插件，可以使用户在任何时候使用 init 命令都能调用最新的 init 插件完成项目初始化。</p>
+<p>说完了项目初始化，再来看一下开发/迭代过程中会遇到哪些问题。</p>
+<h2 id="2-3-开发-迭代"><a href="#2-3-开发-迭代" class="headerlink" title="2.3 开发/迭代"></a>2.3 开发/迭代</h2><p>完成项目初始化进入开发阶段，这个阶段应该是关注业务本身、减少重复工作、高效快速的。</p>
+<h3 id="2-3-1-dev-环境"><a href="#2-3-1-dev-环境" class="headerlink" title="2.3.1 dev 环境"></a>2.3.1 dev 环境</h3><p>开始项目开发遇到的第一个问题就是 dev 环境。需要 webpack 配置编译代码、需要一个本地 server、需要一个数据转发、需要 eslint 配置规范编码等。</p>
+<p>这一部分可以通过 @sharkr/scripts 提供 webpack 配置和 server 脚本，在模板里集成调用，用 koa 起一个本地服务，koa 中间件完成转发等。@sharkr/eslint-config-react 定义编码规范。在这个环节规范了流程和配置，有效的保障项目质量。</p>
+<p>有了一个完备的 dev 环境，再来看一下前面说到的资源复用和资源/项目升级。</p>
+<h3 id="2-3-2-资源复用和资源-项目升级"><a href="#2-3-2-资源复用和资源-项目升级" class="headerlink" title="2.3.2 资源复用和资源/项目升级"></a>2.3.2 资源复用和资源/项目升级</h3><h4 id="资源复用"><a href="#资源复用" class="headerlink" title="资源复用"></a>资源复用</h4><p>简单把资源分为两类，一类是有固定输入输出，可抽离的，例如时间控件，下拉列表等；还有一类是无固定输入输出，不可抽离，但是又具有某些共性的，例如B端常见的列表页、详情页，这一部分资源没有一个很好的复用方式。</p>
+<p>对于第一类资源，可以采用封装组件的形式完成资源共享：</p>
+<img src="/blog/2019/12/24/严选工程化实践/4.jpg" title="This is an image">
+<p>对于第二类资源，以前的做法基本是 Ctrl+c、Ctrl+v 来复用，这种做法不够高级，还效率不高，所以在 cli 中提供了另外一种做法，那就是将代码模板抽离到一个 schematic 包里，然后通过 @sharkr/cli 来安装这个包，并且执行里面的 schematic。</p>
+<img src="/blog/2019/12/24/严选工程化实践/5.jpg" title="This is an image">
+<h4 id="资源-项目升级"><a href="#资源-项目升级" class="headerlink" title="资源/项目升级"></a>资源/项目升级</h4><p>同样的，假如项目或者是资源需要升级，就需要在项目中升级依赖，可能还需要修改配置、甚至调整目录结构、修改api调用等。这种升级以前的做法是，出一份升级文档，升级者按照文档一步步修改项目完成升级。假如有几十个项目，就需要几十个人做相同的事几十遍，这无疑是一个大的人力消耗，作为一个提效工具，就是需要将这部分重复的工作通过代码完成。</p>
+<img src="/blog/2019/12/24/严选工程化实践/6.jpg" title="This is an image">
+<ul>
+<li>把升级文档里做的事情编写成 schematic 包</li>
+<li>通过 @sharkr/cli 来安装这个包，并且执行里面的 schematic</li>
+</ul>
+<p>这么一看，好像很简单，不管是资源复用，还是项目升级，都写成 schematic 包就好了，那么schematic到底是什么呢？</p>
+<h3 id="2-3-3-schematics"><a href="#2-3-3-schematics" class="headerlink" title="2.3.3 schematics"></a>2.3.3 schematics</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>schematics 是 ngCli 团队开发的一个强大和通用的工作流程工具，开发者可以将变换应用于项目中，例如：创建新组件、添加配置项、修改现有项目，或者更新你的代码来修复更新依赖时带来的 break change。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>schematics 如它名字一样，可以理解为一个描述了具体操作的原理图。</p>
+<p>schematics 的输入是一个树，包含一个基础区域（一组已经存在的文件）和一个临时区域（要应用于基础区域的更改列表）），schemtics 描述了对 Tree 的修改，并将这些修改合并到临时区域的更改列表中，再往外输出一个新的 Tree。</p>
+<p>在整个操作完结，并得到确认后，链条中所有描述的修改才会真正被应用。</p>
+<p><a href="https://angular.io/guide/schematics" target="_blank" rel="noopener">更多schematics知识&gt;&gt;</a></p>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><p>和常规的js脚本工具相比，它的优势在哪呢？</p>
+<ul>
+<li><p>开发便捷</p>
+<p>  提供了丰富而强大的通用能力，帮助开发者快速开发：在 code generate 领域，可以通过使用其模板能力，构建各种类型的动态场景代码模板，快速生成代码。同时还提供了丰富的 util，提供包括 ast、git 初始化、TslintFixTask tslint 处理等能力。</p>
+</li>
+<li><p>易于调试 </p>
+<p>  schmatics 由于其虚拟树的设计，在开发阶段支持干运行，并不会对文件系统执行任何直接操作，方便开发者在项目中进行调试，安全无污染。</p>
+</li>
+<li><p>可扩展性和可重用性</p>
+<p>  从其原理可以看出，schmatics 的整体设计，遵循了函数式范式，schematics 不会产生副作用（副作用只会被记录在缓存区中），具备原子性。schematics 可以自由 Compose 成新的 schematics。</p>
+</li>
+<li><p>测试友好</p>
+<p>  schmatics 提供了完备的测试支持库，测试用例书写没有障碍。</p>
+</li>
+</ul>
+<h4 id="schematics-封装"><a href="#schematics-封装" class="headerlink" title="schematics 封装"></a>schematics 封装</h4><p>既然 schematics 处理文件很友好，而且刚好能解决文件处理问题，于是我们就引入了 schematics 完成文件处理，并对它做了一层封装。</p>
+<img src="/blog/2019/12/24/严选工程化实践/7.jpg" title="This is an image">
+<ul>
+<li>最底层主要依赖 @angular-devkit/schematics 和 @angular-devkit/core 提供 schematics 基础能力；</li>
+<li>将公共能力提取到 @schematics/util 方便开发调用；</li>
+<li>提供 schematics 开发模板，方便开发新建 schematics 包；封装 schematics 的 cli，也就是说它也可以单独调用命令；</li>
+<li>资源（通用资源、项目改造资源、模板升级资源等）会做一些整合，这些资源集合将作为物料维护在物料海，将来会跟我们正在开发的物料平台对接；</li>
+<li>向上暴露所有的命令，最终在 @sharkr/cli 作为统一出口。</li>
+</ul>
+<p>下面再来看下，开发和使用一个 schematics 包需要做点什么呢？</p>
+<img src="/blog/2019/12/24/严选工程化实践/8.jpg" title="This is an image">
+<p>首先，对于开发者来说，需要做以下三步：</p>
+<ol>
+<li>根据 schematics 规范开发一个 schematics 包</li>
+<li>定义配置项（可选）</li>
+<li>定义 schema 命令</li>
+</ol>
+<p>其次，对于用户来说，需要做以下三步：</p>
+<ol>
+<li>使用 @sharkr/cli 调用 schematics 包</li>
+<li>输入配置（可选）</li>
+<li>完成项目修改</li>
+</ol>
+<p>那么 @sharkr/cli 做了什么了？</p>
+<ol>
+<li>@sharkr/cli 调用 @sharkr/schematics 插件</li>
+<li>schematics 插件解析出自定义配置项，生成用户会话</li>
+<li>根据用户会话拿到 option，传入 option 调用 Rule 函数</li>
+<li>修改文件放到暂存区</li>
+<li>确认修改后更新物理文件</li>
+</ol>
+<p>这里 Rule 函数是需要开发者实现的，任何你想写成文档的都能通过代码方式写在这个 Rule 函数里。</p>
+<h4 id="schematics-实践"><a href="#schematics-实践" class="headerlink" title="schematics 实践"></a>schematics 实践</h4><p>下面来看一个实际的例子：前段时间我们的项目都需要完成服务上云，为了实现上云，需要调整下CI脚本，还要往项目里放一些环境配置文件，涉及到多处文件修改和增加，所以我们写了一个 @sharkr/ng-cloud-add 的 schematics 包达到快速改造项目的目的。以下是效果：</p>
+<img src="/blog/2019/12/24/严选工程化实践/9.jpg" title="This is an image">
+<p>核心代码写起来跟写文档类似：</p>
+<img src="/blog/2019/12/24/严选工程化实践/10.jpg" title="This is an image">
+<p>以上就讲完了在开发/迭代过程中遇到的问题和解决方案，最后再看一下CICD阶段做了什么</p>
+<h2 id="2-4-CI"><a href="#2-4-CI" class="headerlink" title="2.4 CI"></a>2.4 CI</h2><p>这部分跟 dev 环境类似，也需要提供 webpack 配置、build 脚本、还约束了 build 打包后的目录规范、配置部署相关文件。</p>
+<h1 id="3-价值与后续计划"><a href="#3-价值与后续计划" class="headerlink" title="3. 价值与后续计划"></a>3. 价值与后续计划</h1><h2 id="3-1-价值"><a href="#3-1-价值" class="headerlink" title="3.1 价值"></a>3.1 价值</h2><p>通过介绍以上的一些方案设计，可以发现这套工具可以让开发更专注业务本身，初始化项目之后就可以直接进入开发；重复的Ctrl+c、Ctrl+v可以通过 schematics 完成，省去重复的人力成本；项目/资源升级可以更加快速推进；规范和文档沉淀到工具中供使用，非常有利于规范的遵守。</p>
+<h2 id="3-2-后续计划"><a href="#3-2-后续计划" class="headerlink" title="3.2 后续计划"></a>3.2 后续计划</h2><p>接下来长远的规划将会从以下两点展开：</p>
+<ol>
+<li>与资源平台结合。目前放在 schematics 包里的资源没有一个很好的展示平台，后续将会对接正在开发的物料平台，让资源更容易被共享。</li>
+<li>vscode 可视化扩展能力。为了让开发在开发过程中更加快捷高效，后续会结合 vscode 的插件能力，让添加资源更容易。</li>
+</ol>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h1><p>本篇分享主要从四个方面对工程化实践做了一个阐述：</p>
+<ol>
+<li>开发规范的落地依赖模板收敛项目规范，cli 工具收敛流程规范的方式，并在初始化项目时将模板应用于实际项目场景。</li>
+<li>cli 工具的扩展依赖于插件式，对于自定义的部分提供相应插件即可扩展，而插件的更新依赖 npx 调用的方式，解决用户需要频繁更新问题。</li>
+<li>方便快速初始化项目，提供完备的 dev 环境和 build 脚本等提升了开发效率。</li>
+<li>资源复用和资源/项目升级统称为文件处理，这部分借用了 angular 里的 schematics 功能来完成。在这部分还讲了什么是 schematics 以及它在 cli 里做了什么。</li>
+</ol>
+<p>以上。</p>
 
         </div>
 
         <section class="meta">
-            <time class="time" itemprop="dateUpdated" datetime="2020-01-20T17:51:55+08:00" content="2020-01-20">
+            <time class="time" itemprop="dateUpdated" datetime="2020-03-06T11:04:01+08:00" content="2020-03-06">
                 <i class="fas fa-pen fa-fw" aria-hidden="true"></i>
-                本文最后更新于：2020-01-20
+                本文最后更新于：2020-03-06
             </time>
+            
+                
+                <div class="tags">
+                    <i class="fas fa-tags fa-fw" aria-hidden="true"></i>
+                    <a class="tag" href="/blog/tags/node/">node</a>, <a class="tag" href="/blog/tags/cli/">cli</a>, <a class="tag" href="/blog/tags/方案设计/">方案设计</a>
+                </div>
             
         </section>
 
@@ -250,7 +428,7 @@ tags:
 
 <script>
     window.subData = {
-        title: '',
+        title: '严选工程化实践',
         tools: true
     }
 </script>
@@ -309,7 +487,7 @@ tags:
         
             <ul class="entry">
                 
-                    <li><a class="flat-box" href="/blog/categories/前端/"><div class="name">前端</div><div class="badge">6</div></a></li>
+                    <li><a class="flat-box" href="/blog/categories/前端/"><div class="name">前端</div><div class="badge">7</div></a></li>
                 
             </ul>
         
@@ -324,7 +502,7 @@ tags:
             <div><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;标签</div>
         </header>
         <div class="content pure">
-            <a href="/blog/tags/cli/" style="font-size: 14px; color: #999">cli</a> <a href="/blog/tags/css/" style="font-size: 24px; color: #555">css</a> <a href="/blog/tags/html/" style="font-size: 24px; color: #555">html</a> <a href="/blog/tags/http/" style="font-size: 14px; color: #999">http</a> <a href="/blog/tags/js/" style="font-size: 24px; color: #555">js</a> <a href="/blog/tags/node/" style="font-size: 24px; color: #555">node</a> <a href="/blog/tags/typescript/" style="font-size: 24px; color: #555">typescript</a>
+            <a href="/blog/tags/cli/" style="font-size: 19px; color: #777">cli</a> <a href="/blog/tags/css/" style="font-size: 19px; color: #777">css</a> <a href="/blog/tags/html/" style="font-size: 19px; color: #777">html</a> <a href="/blog/tags/http/" style="font-size: 14px; color: #999">http</a> <a href="/blog/tags/js/" style="font-size: 19px; color: #777">js</a> <a href="/blog/tags/node/" style="font-size: 24px; color: #555">node</a> <a href="/blog/tags/typescript/" style="font-size: 19px; color: #777">typescript</a> <a href="/blog/tags/方案设计/" style="font-size: 14px; color: #999">方案设计</a>
         </div>
     </section>
 
@@ -332,6 +510,16 @@ tags:
     
     
         
+    <section class="m_widget toc-wrapper">
+        <header class="header pure">
+            <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;目录</div>
+            <div class="wrapper"><a class="s-toc rightBtn" title="固定到顶部" target="_blank" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+        </header>
+        <div class="content pure">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-目标定义"><span class="toc-text">1. 目标定义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-方案设计"><span class="toc-text">2. 方案设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-架构图"><span class="toc-text">2.1 架构图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-底层依赖"><span class="toc-text">2.1.1 底层依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-插件封装层"><span class="toc-text">2.1.2 插件封装层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-统一命令层"><span class="toc-text">2.1.3 统一命令层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-项目生命周期"><span class="toc-text">2.1.4 项目生命周期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-项目初始化"><span class="toc-text">2.2 项目初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-init-插件"><span class="toc-text">2.2.1 init 插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-插件更新"><span class="toc-text">2.2.2 插件更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-开发-迭代"><span class="toc-text">2.3 开发/迭代</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-dev-环境"><span class="toc-text">2.3.1 dev 环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-资源复用和资源-项目升级"><span class="toc-text">2.3.2 资源复用和资源/项目升级</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#资源复用"><span class="toc-text">资源复用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#资源-项目升级"><span class="toc-text">资源/项目升级</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-schematics"><span class="toc-text">2.3.3 schematics</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原理"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#schematics-封装"><span class="toc-text">schematics 封装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#schematics-实践"><span class="toc-text">schematics 实践</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-CI"><span class="toc-text">2.4 CI</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-价值与后续计划"><span class="toc-text">3. 价值与后续计划</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-价值"><span class="toc-text">3.1 价值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-后续计划"><span class="toc-text">3.2 后续计划</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-总结"><span class="toc-text">4.总结</span></a></li></ol>
+        </div>
+    </section>
+
 
     
     
